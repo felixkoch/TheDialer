@@ -10,11 +10,15 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Tray, Menu, nativeImage } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import AutoLaunch from 'auto-launch';
-import MenuBuilder from './menu';
+// import MenuBuilder from './menu';
+import callSnom from './callSnom';
+import Store from './Store';
+
+const path = require('path');
 
 export default class AppUpdater {
   constructor() {
@@ -25,6 +29,8 @@ export default class AppUpdater {
 }
 
 let mainWindow = null;
+let appIcon = null;
+let isQuiting = false;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -48,6 +54,41 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
+app.setAsDefaultProtocolClient('tel');
+const store = new Store();
+// This will check if the app is already running
+// https://github.com/electron/electron/blob/master/docs/api/app.md#appmakesingleinstancecallback
+let deeplinkingUrl;
+const shouldQuit = app.makeSingleInstance((argv, workingDirectory) => {
+  // Protocol handler for windows
+  // argv: An array of the second instance’s (command line / deep linked) arguments
+  if (process.platform == 'win32') {
+    // Keep only command line / deep linked arguments
+    deeplinkingUrl = argv.slice(1);
+
+    store.set('loading', true);
+    callSnom(
+      {
+        ip: store.get('ip'),
+        user: store.get('user'),
+        password: store.get('password'),
+        number: deeplinkingUrl
+      },
+      response => {
+        store.set('error', response.error);
+        store.set('loading', false);
+        if (mainWindow) {
+          mainWindow.show();
+        }
+      }
+    );
+  }
+});
+
+if (shouldQuit) {
+  app.quit();
+  //return
+}
 /**
  * Add event listeners...
  */
@@ -82,20 +123,71 @@ app.on('ready', async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
+    /*
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {
       mainWindow.show();
       mainWindow.focus();
     }
+    */
+    if (store.get('ip') == '') {
+      mainWindow.show();
+      mainWindow.focus();
+    } else {
+      mainWindow.hide();
+    }
   });
 
-  mainWindow.on('closed', () => {
-    mainWindow = null;
+  // mainWindow.on('closed', () => {
+  //   mainWindow = null;
+  // });
+
+
+  mainWindow.on('minimize', event => {
+    event.preventDefault();
+    mainWindow.hide();
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+  mainWindow.on('close', event => {
+    if (!isQuiting) {
+      event.preventDefault();
+      mainWindow.hide();
+    }
+
+    return false;
+  });
+
+  //const menuBuilder = new MenuBuilder(mainWindow);
+  //menuBuilder.buildMenu();
+
+  const iconPath = path.join(__dirname, 'phone16.png');
+  const trayIcon = nativeImage.createFromPath(iconPath);
+  //trayIcon = trayIcon.resize({ width: 16, height: 16 });
+  appIcon = new Tray(trayIcon);
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show',
+      click: () => {
+        mainWindow.show();
+      }
+    },
+    {
+      label: 'Quit',
+      click: () => {
+        isQuiting = true;
+        app.quit();
+      }
+    }
+  ]);
+
+  // Make a change to the context menu
+  contextMenu.items[1].checked = false;
+
+  // Call this again for Linux because we modified the context menu
+  appIcon.setContextMenu(contextMenu);
+
+  mainWindow.tray = appIcon;
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
