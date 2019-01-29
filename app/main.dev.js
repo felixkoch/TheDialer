@@ -58,6 +58,7 @@ app.setAsDefaultProtocolClient('tel');
 const store = new Store();
 // This will check if the app is already running
 // https://github.com/electron/electron/blob/master/docs/api/app.md#appmakesingleinstancecallback
+/*
 let deeplinkingUrl;
 const shouldQuit = app.makeSingleInstance((argv, workingDirectory) => {
   // Protocol handler for windows
@@ -89,41 +90,69 @@ if (shouldQuit) {
   app.quit();
   //return
 }
-/**
- * Add event listeners...
- */
+*/
+const gotTheLock = app.requestSingleInstanceLock();
 
-app.on('window-all-closed', () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.{app}.
+    store.set('loading', true);
+    store.set('testnumber', commandLine + workingDirectory);
 
-app.on('ready', async () => {
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
-  ) {
-    await installExtensions();
-  }
-
-  mainWindow = new BrowserWindow({
-    show: false,
-    width: 400,
-    height: 500
+    callSnom(
+      {
+        ip: store.get('ip'),
+        user: store.get('user'),
+        password: store.get('password'),
+        number: commandLine
+      },
+      response => {
+        store.set('error', response.error);
+        store.set('loading', false);
+        if (mainWindow) {
+          mainWindow.show();
+        }
+      }
+    );
   });
 
-  mainWindow.loadURL(`file://${__dirname}/app.html`);
+  /**
+   * Add event listeners...
+   */
 
-  // @TODO: Use 'ready-to-show' event
-  //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
-  mainWindow.webContents.on('did-finish-load', () => {
-    if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined');
+  app.on('window-all-closed', () => {
+    // Respect the OSX convention of having the application in memory even
+    // after all windows have been closed
+    if (process.platform !== 'darwin') {
+      app.quit();
     }
-    /*
+  });
+
+  app.on('ready', async () => {
+    if (
+      process.env.NODE_ENV === 'development' ||
+      process.env.DEBUG_PROD === 'true'
+    ) {
+      await installExtensions();
+    }
+
+    mainWindow = new BrowserWindow({
+      show: false,
+      width: 400,
+      height: 500
+    });
+
+    mainWindow.loadURL(`file://${__dirname}/app.html`);
+
+    // @TODO: Use 'ready-to-show' event
+    //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
+    mainWindow.webContents.on('did-finish-load', () => {
+      if (!mainWindow) {
+        throw new Error('"mainWindow" is not defined');
+      }
+      /*
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {
@@ -131,68 +160,68 @@ app.on('ready', async () => {
       mainWindow.focus();
     }
     */
-    if (store.get('ip') == '') {
-      mainWindow.show();
-      mainWindow.focus();
-    } else {
-      mainWindow.hide();
-    }
-  });
+      if (store.get('ip') == '') {
+        mainWindow.show();
+        mainWindow.focus();
+      } else {
+        mainWindow.hide();
+      }
+    });
 
-  // mainWindow.on('closed', () => {
-  //   mainWindow = null;
-  // });
+    // mainWindow.on('closed', () => {
+    //   mainWindow = null;
+    // });
 
-
-  mainWindow.on('minimize', event => {
-    event.preventDefault();
-    mainWindow.hide();
-  });
-
-  mainWindow.on('close', event => {
-    if (!isQuiting) {
+    mainWindow.on('minimize', event => {
       event.preventDefault();
       mainWindow.hide();
-    }
+    });
 
-    return false;
+    mainWindow.on('close', event => {
+      if (!isQuiting) {
+        event.preventDefault();
+        mainWindow.hide();
+      }
+
+      return false;
+    });
+
+    //const menuBuilder = new MenuBuilder(mainWindow);
+    //menuBuilder.buildMenu();
+
+    const iconPath = path.join(__dirname, 'phone16.png');
+    const trayIcon = nativeImage.createFromPath(iconPath);
+    //trayIcon = trayIcon.resize({ width: 16, height: 16 });
+    appIcon = new Tray(trayIcon);
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: 'Show',
+        click: () => {
+          mainWindow.show();
+        }
+      },
+      {
+        label: 'Quit',
+        click: () => {
+          isQuiting = true;
+          app.quit();
+        }
+      }
+    ]);
+
+    // Make a change to the context menu
+    contextMenu.items[1].checked = false;
+
+    // Call this again for Linux because we modified the context menu
+    appIcon.setContextMenu(contextMenu);
+
+    mainWindow.tray = appIcon;
+
+    // Remove this if your app does not use auto updates
+    // eslint-disable-next-line
+    new AppUpdater();
   });
-
-  //const menuBuilder = new MenuBuilder(mainWindow);
-  //menuBuilder.buildMenu();
-
-  const iconPath = path.join(__dirname, 'phone16.png');
-  const trayIcon = nativeImage.createFromPath(iconPath);
-  //trayIcon = trayIcon.resize({ width: 16, height: 16 });
-  appIcon = new Tray(trayIcon);
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Show',
-      click: () => {
-        mainWindow.show();
-      }
-    },
-    {
-      label: 'Quit',
-      click: () => {
-        isQuiting = true;
-        app.quit();
-      }
-    }
-  ]);
-
-  // Make a change to the context menu
-  contextMenu.items[1].checked = false;
-
-  // Call this again for Linux because we modified the context menu
-  appIcon.setContextMenu(contextMenu);
-
-  mainWindow.tray = appIcon;
-
-  // Remove this if your app does not use auto updates
-  // eslint-disable-next-line
-  new AppUpdater();
-});
+}
 
 const autoLauncher = new AutoLaunch({
   name: 'TheDialer'
