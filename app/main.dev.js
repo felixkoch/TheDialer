@@ -13,6 +13,7 @@
 import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import AutoLaunch from 'auto-launch';
 import MenuBuilder from './menu';
 
 export default class AppUpdater {
@@ -100,3 +101,21 @@ app.on('ready', async () => {
   // eslint-disable-next-line
   new AppUpdater();
 });
+
+const autoLauncher = new AutoLaunch({
+  name: 'TheDialer'
+});
+
+autoLauncher.enable();
+
+autoLauncher
+  .isEnabled()
+  .then(isEnabled => {
+    if (isEnabled) {
+      return;
+    }
+    return autoLauncher.enable();
+  })
+  .catch(() => {
+    // handle error
+  });
