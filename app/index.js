@@ -1,6 +1,16 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
+import App from './components/App.js'
+
+render(
+  <AppContainer><App /></AppContainer>,
+  document.getElementById('root')
+);
+/*
+import React from 'react';
+import { render } from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
 import Root from './containers/Root';
 import { configureStore, history } from './store/configureStore';
 import './app.global.css';
@@ -26,3 +36,4 @@ if (module.hot) {
     );
   });
 }
+*/

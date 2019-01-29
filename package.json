@@ -256,6 +256,8 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.5.0",
+    "@material-ui/core": "^3.9.1",
+    "@material-ui/icons": "^3.0.2",
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",
     "electron-log": "^2.2.17",
@@ -269,7 +271,8 @@
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "source-map-support": "^0.5.9"
+    "source-map-support": "^0.5.9",
+    "typeface-roboto": "^0.0.54"
   },
   "devEngines": {
     "node": ">=7.x",
