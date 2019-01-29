@@ -64,7 +64,8 @@
       "app/app.html",
       "app/main.prod.js",
       "app/main.prod.js.map",
-      "package.json"
+      "package.json",
+      "phone16.png"
     ],
     "dmg": {
       "contents": [
@@ -104,6 +105,12 @@
       "owner": "electron-react-boilerplate",
       "repo": "electron-react-boilerplate",
       "private": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": true,
+      "include": "installer.nsh"
     }
   },
   "repository": {
