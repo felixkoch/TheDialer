@@ -1,10 +1,15 @@
+import { parseIncompletePhoneNumber } from 'libphonenumber-js';
+
 const electron = require('electron');
+
 
 export default function callSnom(options, cb) {
   
+  const number = encodeURIComponent(parseIncompletePhoneNumber(options.number));
+
   const request = (electron.net || electron.remote.net).request(
-    //`http://${options.ip}/command.htm?number=${options.number}`
-    `http://${options.ip}/command.php?number=${options.number}`
+    `http://${options.ip}/command.htm?number=${number}`
+    //`http://${options.ip}/command.php?number=${number}`
   );
 
   request.on('response', response => {
