@@ -65,7 +65,7 @@
       "app/main.prod.js",
       "app/main.prod.js.map",
       "package.json",
-      "phone16.png"
+      "app/phone16.png"
     ],
     "dmg": {
       "contents": [
