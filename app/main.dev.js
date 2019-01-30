@@ -10,7 +10,15 @@
  *
  * @flow
  */
-import { app, BrowserWindow, Tray, Menu, nativeImage } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  Tray,
+  Menu,
+  nativeImage,
+  globalShortcut,
+  clipboard
+} from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import AutoLaunch from 'auto-launch';
@@ -55,7 +63,7 @@ const installExtensions = async () => {
 };
 
 app.setAsDefaultProtocolClient('tel');
-const store = new Store();
+
 // This will check if the app is already running
 // https://github.com/electron/electron/blob/master/docs/api/app.md#appmakesingleinstancecallback
 /*
@@ -98,20 +106,29 @@ if (!gotTheLock) {
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
     // Someone tried to run a second instance, we should focus our window.{app}.
+    const store = new Store();
     store.set('loading', true);
     store.set('testnumber', commandLine + workingDirectory);
+
+    let number = "";
+    let pos = commandLine.toLowerCase().indexOf('tel:');
+
+    if(pos != -1)
+    {
+      number = commandLine.substr(pos+4);
+    }
 
     callSnom(
       {
         ip: store.get('ip'),
         user: store.get('user'),
         password: store.get('password'),
-        number: commandLine
+        number: number
       },
       response => {
         store.set('error', response.error);
         store.set('loading', false);
-        if (mainWindow) {
+        if (mainWindow && response.error != '') {
           mainWindow.show();
         }
       }
@@ -160,6 +177,7 @@ if (!gotTheLock) {
       mainWindow.focus();
     }
     */
+      const store = new Store();
       if (store.get('ip') == '') {
         mainWindow.show();
         mainWindow.focus();
@@ -220,6 +238,25 @@ if (!gotTheLock) {
     // Remove this if your app does not use auto updates
     // eslint-disable-next-line
     new AppUpdater();
+
+    const ret = globalShortcut.register('CommandOrControl+D', () => {
+      const store = new Store();
+      callSnom(
+        {
+          ip: store.get('ip'),
+          user: store.get('user'),
+          password: store.get('password'),
+          number: clipboard.readText()
+        },
+        response => {
+          store.set('error', response.error);
+          store.set('loading', false);
+          if (mainWindow && response.error != '') {
+            mainWindow.show();
+          }
+        }
+      );
+    });
   });
 }
 

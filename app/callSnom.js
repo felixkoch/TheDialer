@@ -14,7 +14,7 @@ export default function callSnom(options, cb) {
     console.log(`STATUS: ${response.statusCode}`);
     if(response.statusCode == 200)
     {
-      cb({status: 'SUCCESSS', error: "Löppt"});
+      cb({status: 'SUCCESSS', error: ""});
     }
     else if(response.statusCode == 401)
     {
