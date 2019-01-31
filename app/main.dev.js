@@ -111,11 +111,11 @@ if (!gotTheLock) {
     store.set('testnumber', commandLine + workingDirectory);
 
     let number = "";
-    let pos = commandLine.toLowerCase().indexOf('tel:');
+    //let pos = commandLine.toLowerCase().indexOf('tel:');
 
-    if(pos != -1)
+    if(commandLine.length == 2)
     {
-      number = commandLine.substr(pos+4);
+      number = commandLine[1];
     }
 
     callSnom(
