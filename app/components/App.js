@@ -102,7 +102,7 @@ class App extends Component {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="IP / Host *"
+                label="IP / Host of Snom phone*"
                 fullWidth
                 value={this.state.ip}
                 name="ip"
@@ -111,7 +111,7 @@ class App extends Component {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="Benutzer"
+                label="Username Web Interface"
                 fullWidth
                 value={this.state.user}
                 name="user"
@@ -120,7 +120,7 @@ class App extends Component {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="Passwort"
+                label="Password Web Interface"
                 fullWidth
                 type="password"
                 value={this.state.password}
@@ -130,7 +130,7 @@ class App extends Component {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="Test Rufnummer"
+                label="Test number"
                 fullWidth
                 value={this.state.testnumber}
                 name="testnumber"
@@ -146,7 +146,7 @@ class App extends Component {
                 disabled={this.state.loading}
               >
                 <PhoneIcon style={{ mariginRight: 24 }} />
-                {this.state.loading ? "Bitte warten": "Test Rufnummer wählen"}
+                {this.state.loading ? "Please wait": "Dial test number"}
               </Button>
             </Grid>
           </Grid>

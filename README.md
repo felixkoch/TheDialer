@@ -9,7 +9,7 @@ Click-to-call dialer for Snom phones. A Computer Telephony Integration (CTI) sol
 ## Features
 
 - Click-to-call with tel-Hyperlinks from every browser (without extra browser extensions)
-- Dial from clipboard from any software (without extra Addons or Connectors)
+- or dial from clipboard from any software (without extra Addons or Connectors)
 
 ## Usage
 

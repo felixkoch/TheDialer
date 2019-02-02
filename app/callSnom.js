@@ -23,11 +23,11 @@ export default function callSnom(options, cb) {
     }
     else if(response.statusCode == 401)
     {
-      cb({status: 'FAILURE', error: "Bitte Zugangsdaten prüfen."});
+      cb({status: 'FAILURE', error: "Please check credentials."});
     }
     else
     {
-      cb({status: 'FAILURE', error: "Es ist ein Fehler aufgetreten."});
+      cb({status: 'FAILURE', error: "An error has occurred."});
     }
 
     /*
@@ -48,7 +48,7 @@ export default function callSnom(options, cb) {
 
   request.on('error', error => {
     console.log('error');
-    cb({status: 'FAILURE', error: "IP / Host nicht gefunden."});
+    cb({status: 'FAILURE', error: "IP / Host not found."});
   });
 
   request.end();
