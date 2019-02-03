@@ -1,7 +1,7 @@
 {
   "name": "the-dialer",
   "productName": "TheDialer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Click-to-call dialer for Snom phones. A Computer Telephony Integration (CTI) solution ☎️",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",

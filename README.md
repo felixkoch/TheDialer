@@ -14,7 +14,7 @@ Click-to-call dialer for Snom phones. A Computer Telephony Integration (CTI) sol
 ## Usage
 
 - Just click on tel-Hyperlinks in your browser
-- Copy some text into clipboard with `Ctrl+C` and dial with `Ctrl+D`
+- Or copy some text into clipboard with `Ctrl+C` and dial with `Ctrl+D`
 
 ## Compatibility
 
