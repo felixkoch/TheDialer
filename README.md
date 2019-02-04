@@ -2,6 +2,7 @@
 
 [![Donate to this project using Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/felixkoch)
 [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://paypal.me/FelixFabianKoch)
+[![Donate to this project using Flattr](https://img.shields.io/badge/flattr-donate-yellow.svg)](https://flattr.com/@felixkoch)
 
 Click-to-call dialer for Snom phones. A Computer Telephony Integration (CTI) solution ☎️
 
@@ -36,6 +37,8 @@ Thank you in advance! 🙏
 https://www.patreon.com/felixkoch
 
 https://paypal.me/FelixFabianKoch
+
+https://flattr.com/@felixkoch
 
 ## License
 
