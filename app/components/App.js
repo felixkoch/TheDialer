@@ -97,7 +97,7 @@ class App extends Component {
           <Grid container spacing={16}>
             <Grid item xs={12}>
               <Typography variant="h4" align="center">
-                The Dialer
+                TheDialer
               </Typography>
             </Grid>
             <Grid item xs={12}>

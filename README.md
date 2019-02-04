@@ -1,5 +1,8 @@
 # TheDialer
 
+[![Donate to this project using Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/felixkoch)
+[![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://paypal.me/FelixFabianKoch)
+
 Click-to-call dialer for Snom phones. A Computer Telephony Integration (CTI) solution ☎️
 
 ## Download
@@ -9,7 +12,8 @@ Click-to-call dialer for Snom phones. A Computer Telephony Integration (CTI) sol
 ## Features
 
 - Click-to-call with tel-Hyperlinks from every browser (without extra browser extensions)
-- or dial from clipboard from any software (without extra Addons or Connectors)
+- Dial from clipboard from any software (without extra Addons or Connectors)
+- No additional expensive TAPI drivers required
 
 ## Usage
 
@@ -28,6 +32,8 @@ Ask me anything: mail@felixkoch.de
 ## Donate / Become a Sponsor
 
 Thank you in advance! 🙏
+
+https://www.patreon.com/felixkoch
 
 https://paypal.me/FelixFabianKoch
 
