@@ -7,6 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import PhoneIcon from '@material-ui/icons/Phone';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -17,12 +18,11 @@ import ErrorIcon from '@material-ui/icons/Error';
 import callSnom from '../callSnom';
 import Store from '../Store';
 
-
 const styles = theme => ({
   error: {
-    backgroundColor: theme.palette.error.dark,
-  }});
-
+    backgroundColor: theme.palette.error.dark
+  }
+});
 
 class App extends Component {
   constructor(props) {
@@ -36,7 +36,8 @@ class App extends Component {
       password: this.store.get('password'),
       testnumber: this.store.get('testnumber'),
       error: this.store.get('error'),
-      loading: this.store.get('loading')
+      loading: this.store.get('loading'),
+      protocol: this.store.get('protocol', 'http')
     };
   }
 
@@ -69,7 +70,6 @@ class App extends Component {
         this.store.set('error', response.error);
         this.setState({ loading: false });
         this.store.set('loading', false);
-
       }
     );
   };
@@ -111,6 +111,23 @@ class App extends Component {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                label="Connection type*"
+                select
+                fullWidth
+                value={this.state.protocol}
+                name="protocol"
+                onChange={this.handleChange}
+              >
+                <MenuItem key='http' value='http'>
+                  http
+                </MenuItem>
+                <MenuItem key='https' value='https'>
+                  https
+                </MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
                 label="Username Web Interface"
                 fullWidth
                 value={this.state.user}
@@ -146,7 +163,7 @@ class App extends Component {
                 disabled={this.state.loading}
               >
                 <PhoneIcon style={{ mariginRight: 24 }} />
-                {this.state.loading ? "Please wait": "Dial test number"}
+                {this.state.loading ? 'Please wait' : 'Dial test number'}
               </Button>
             </Grid>
           </Grid>
@@ -156,4 +173,4 @@ class App extends Component {
   }
 }
 
-export default withStyles(styles)(App)
+export default withStyles(styles)(App);
