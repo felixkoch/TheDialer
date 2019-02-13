@@ -37,7 +37,8 @@ class App extends Component {
       testnumber: this.store.get('testnumber'),
       error: this.store.get('error'),
       loading: this.store.get('loading'),
-      protocol: this.store.get('protocol', 'http')
+      protocol: this.store.get('protocol', 'http'),
+      shortcut: this.store.get('shortcut', 'CmdOrCtrl+D')
     };
   }
 
@@ -144,6 +145,23 @@ class App extends Component {
                 name="password"
                 onChange={this.handleChange}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Dial from Clipboard Shortcut"
+                select
+                fullWidth
+                value={this.state.shortcut}
+                name="protocol"
+                onChange={this.handleChange}
+              >
+                <MenuItem key='CmdOrCtrl+D' value='CmdOrCtrl+D'>
+                  CmdOrCtrl+D
+                </MenuItem>
+                <MenuItem key='https' value='https'>
+                  https
+                </MenuItem>
+              </TextField>
             </Grid>
             <Grid item xs={12}>
               <TextField
