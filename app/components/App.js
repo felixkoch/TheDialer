@@ -78,6 +78,19 @@ class App extends Component {
   render() {
     const { classes } = this.props;
 
+    const shortcuts = [
+      'CmdOrCtrl+D',
+      'F2',
+      'F3',
+      'F4',
+      'F5',
+      'F6',
+      'F7',
+      'F8',
+      'F9',
+      'F10'
+    ];
+
     return (
       <React.Fragment>
         <CssBaseline />
@@ -119,10 +132,10 @@ class App extends Component {
                 name="protocol"
                 onChange={this.handleChange}
               >
-                <MenuItem key='http' value='http'>
+                <MenuItem key="http" value="http">
                   http
                 </MenuItem>
-                <MenuItem key='https' value='https'>
+                <MenuItem key="https" value="https">
                   https
                 </MenuItem>
               </TextField>
@@ -152,15 +165,14 @@ class App extends Component {
                 select
                 fullWidth
                 value={this.state.shortcut}
-                name="protocol"
+                name="shortcut"
                 onChange={this.handleChange}
               >
-                <MenuItem key='CmdOrCtrl+D' value='CmdOrCtrl+D'>
-                  CmdOrCtrl+D
-                </MenuItem>
-                <MenuItem key='https' value='https'>
-                  https
-                </MenuItem>
+                {shortcuts.map(s => (
+                  <MenuItem key={s} value={s}>
+                    {s}
+                  </MenuItem>
+                ))}
               </TextField>
             </Grid>
             <Grid item xs={12}>
