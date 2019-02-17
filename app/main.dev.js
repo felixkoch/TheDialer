@@ -120,6 +120,7 @@ if (!gotTheLock) {
 
     callSnom(
       {
+        protocol: store.get('protocol', 'http'),
         ip: store.get('ip'),
         user: store.get('user'),
         password: store.get('password'),
@@ -158,7 +159,7 @@ if (!gotTheLock) {
     mainWindow = new BrowserWindow({
       show: false,
       width: 400,
-      height: 500
+      height: 650
     });
 
     mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -238,11 +239,12 @@ if (!gotTheLock) {
     // Remove this if your app does not use auto updates
     // eslint-disable-next-line
     new AppUpdater();
-
-    const ret = globalShortcut.register('CommandOrControl+D', () => {
+    const store = new Store();
+    const ret = globalShortcut.register(store.get('shortcut', 'CmdOrCtrl+D'), () => {
       const store = new Store();
       callSnom(
         {
+          protocol: store.get('protocol', 'http'),
           ip: store.get('ip'),
           user: store.get('user'),
           password: store.get('password'),

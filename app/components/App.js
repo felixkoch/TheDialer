@@ -61,6 +61,7 @@ class App extends Component {
 
     callSnom(
       {
+        protocol: this.store.get('protocol', 'http'),
         ip: this.store.get('ip'),
         user: this.store.get('user'),
         password: this.store.get('password'),
